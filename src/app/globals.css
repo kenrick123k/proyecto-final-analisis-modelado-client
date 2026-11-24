@@ -1,26 +1,180 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --canvas: #f1f2ea;
+  --surface: #fbfbf7;
+  --surface-raised: #ffffff;
+  --ink: #18231d;
+  --ink-soft: #5e665f;
+  --ink-faint: #666d66;
+  --primary: #1e4b38;
+  --primary-strong: #14382a;
+  --primary-soft: #dce8df;
+  --on-primary: #f4f6ef;
+  --accent: #d2922f;
+  --accent-strong: #8a5a12;
+  --accent-soft: #f3e2bc;
+  --line: #d7d9ce;
+  --line-strong: #b9bdb1;
+  --danger: #a93226;
+  --danger-soft: #f7e4e0;
+  --focus: #b97a1f;
+  --brand-field: #1b3b2d;
+  --brand-field-deep: #142d22;
+  --brand-ink: #f1eee2;
+  --brand-ink-soft: rgba(241, 238, 226, 0.72);
+  --brand-line: rgba(241, 238, 226, 0.36);
+  --brand-accent: #e3b45c;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --canvas: #0f1713;
+    --surface: #16211b;
+    --surface-raised: #1b2821;
+    --ink: #ecefe6;
+    --ink-soft: #a3ada4;
+    --ink-faint: #7f8a81;
+    --primary: #8fc3a7;
+    --primary-strong: #b4d8c2;
+    --primary-soft: #1e3329;
+    --on-primary: #0f1713;
+    --accent: #e0b15a;
+    --accent-strong: #f0c87a;
+    --accent-soft: #3a2e18;
+    --line: #2a3830;
+    --line-strong: #3d4d44;
+    --danger: #e78b80;
+    --danger-soft: #3a1f1b;
+    --focus: #e0b15a;
+    --brand-field: #142d22;
+    --brand-field-deep: #0d2018;
+    --brand-ink: #f1eee2;
+    --brand-ink-soft: rgba(241, 238, 226, 0.7);
+    --brand-line: rgba(241, 238, 226, 0.34);
+    --brand-accent: #e3b45c;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+  --color-on-primary: var(--on-primary);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-focus: var(--focus);
+  --color-brand-field: var(--brand-field);
+  --color-brand-field-deep: var(--brand-field-deep);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-ink-soft: var(--brand-ink-soft);
+  --color-brand-line: var(--brand-line);
+  --color-brand-accent: var(--brand-accent);
+  --font-sans: var(--font-instrument);
+  --font-display: var(--font-fraunces);
+  --radius-field: 0.5rem;
+  --radius-surface: 1.25rem;
+}
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+
+  html {
+    height: 100%;
+  }
+
+  body {
+    min-height: 100%;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  input::placeholder {
+    color: var(--ink-faint);
+  }
+}
+
+@keyframes plan-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.plan-line {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: plan-draw 2400ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.plan-fill {
+  opacity: 0;
+  animation: plan-appear 900ms ease-out 1400ms forwards;
+}
+
+@keyframes plan-appear {
+  to {
+    opacity: 1;
+  }
+}
+
+.login-reveal {
+  animation: reveal-rise 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.login-reveal-delayed {
+  animation: reveal-rise 720ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plan-line,
+  .plan-fill,
+  .login-reveal,
+  .login-reveal-delayed {
+    animation: none;
+  }
+
+  .plan-line {
+    stroke-dashoffset: 0;
+  }
+
+  .plan-fill {
+    opacity: 1;
+  }
 }
